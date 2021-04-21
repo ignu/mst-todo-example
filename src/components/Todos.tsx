@@ -18,7 +18,7 @@ const Todos = () => {
         Todos {store.state} {todos.length}
       </h1>
       {todos.map((todo) => (
-        <Todo key={todo.id} todo={todo} />
+        <Todo onToggle={() => store.toggle(todo)} key={todo.id} todo={todo} />
       ))}
     </div>
   );
