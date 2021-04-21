@@ -36,6 +36,8 @@
 
 .todo .checkbox-wrapper {
   flex-grow: 0;
+  cursor: pointer;
+  padding: 4px;
 }
 
 /* stolen from https://tobiasahlin.com/spinkit/*/
