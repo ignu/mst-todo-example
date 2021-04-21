@@ -8,10 +8,12 @@ Todos in the list should be sorted in the following order:
 - Sort by due date (due soonest at the top)
 - Completed items at the bottom
 
-### `yarn start`
+### `yarn && yarn start`
 
-Runs the app in the development mode.\
+Downloads the dependencies and runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+There is also a version deployed to surge at [http://endtodo.surge.sh/](http://endtodo.surge.sh/)
 
 # Dependencies
 
