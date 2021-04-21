@@ -48,7 +48,13 @@ const TodoStore = types
   })
   .actions((self) => {
     const fetchTodos = flow(function* fetchTodos() {
-      self._todos = yield apiFetch('get');
+      try {
+        self.state = 'loading';
+        self._todos = yield apiFetch('get');
+        self.state = 'complete';
+      } catch {
+        self.state = 'error';
+      }
     });
 
     return {

@@ -1,5 +1,6 @@
 import React from 'react';
-import { TodoType, useMst } from '../store';
+import { observer } from 'mobx-react-lite'; //
+import { useMst } from '../store';
 import Todo from './Todo';
 
 const Todos = () => {
@@ -7,11 +8,19 @@ const Todos = () => {
   const todos = store.todos();
 
   if (store.state === 'loading') {
-    return <h1>Loading</h1>;
+    return (
+      <div className="spinner">
+        <div className="double-bounce1"></div>
+        <div className="double-bounce2"></div>
+      </div>
+    );
   }
 
   return (
     <div className="todos">
+      <h1>
+        Todos {store.state} {todos.length}
+      </h1>
       {todos.map((todo) => (
         <Todo key={todo.id} todo={todo} />
       ))}
@@ -19,4 +28,4 @@ const Todos = () => {
   );
 };
 
-export default Todos;
+export default observer(Todos);
