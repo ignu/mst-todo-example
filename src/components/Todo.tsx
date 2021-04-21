@@ -8,7 +8,7 @@ type PropTypes = {
 const Todo = ({ todo }: PropTypes) => {
   console.log('🦄 - todo', todo);
   return (
-    <div>
+    <div className={`todo ${todo.state}`}>
       <h1>{todo.description}</h1>
     </div>
   );

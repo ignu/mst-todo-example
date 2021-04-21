@@ -1,5 +1,6 @@
 import { types, Instance, flow, getSnapshot } from 'mobx-state-tree';
 import { createContext, useContext } from 'react';
+import { DateTime } from './DateType';
 
 const URI_BASE = 'https://944ba3c5-94c3-4369-a9e6-a509d65912e2.mock.pstmn.io/';
 const apiFetch = (path: string, opts?: Partial<RequestInit>) => {
@@ -13,12 +14,20 @@ const apiFetch = (path: string, opts?: Partial<RequestInit>) => {
   }).then((x) => x.json());
 };
 
-export const Todo = types.model({
-  id: types.identifier,
-  description: types.string,
-  dueDate: types.maybeNull(types.string),
-  isComplete: types.boolean,
-});
+export const Todo = types
+  .model({
+    id: types.identifier,
+    description: types.string,
+    dueDate: types.maybeNull(DateTime),
+    isComplete: types.boolean,
+  })
+  .views((self) => {
+    return {
+      get state() {
+        return 'pending';
+      },
+    };
+  });
 
 const TodoStore = types
   .model({
