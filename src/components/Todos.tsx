@@ -14,9 +14,7 @@ const Todos = () => {
 
   return (
     <div className="todos">
-      <h1>
-        Todos {store.state} {todos.length}
-      </h1>
+      <h1>Todos</h1>
       {todos.map((todo) => (
         <Todo onToggle={() => store.toggle(todo)} key={todo.id} todo={todo} />
       ))}

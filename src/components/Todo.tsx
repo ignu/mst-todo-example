@@ -1,6 +1,7 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { TodoType } from '../store';
 import { IoIosCheckbox, IoMdSquareOutline } from 'react-icons/io';
+import { TodoType } from '../store';
 
 type TodoPropTypes = {
   todo: TodoType;
@@ -9,11 +10,11 @@ type TodoPropTypes = {
 
 const Todo = ({ todo, onToggle }: TodoPropTypes) => {
   return (
-    <div className={`todo ${todo.state}`}>
+    <div className={`todo ${todo.state} ${todo.loading ? 'loading' : ''}`}>
       <span className="checkbox-wrapper">
         <a onClick={onToggle} aria-label="toggle">
-          {!todo.isComplete && <IoMdSquareOutline size={24} />}
-          {todo.isComplete && <IoIosCheckbox size={24} />}
+          {!todo.loading && !todo.isComplete && <IoMdSquareOutline size={24} />}
+          {!todo.loading && todo.isComplete && <IoIosCheckbox size={24} />}
         </a>
       </span>
       <span className="description">{todo.description}</span>
@@ -24,4 +25,4 @@ const Todo = ({ todo, onToggle }: TodoPropTypes) => {
   );
 };
 
-export default Todo;
+export default observer(Todo);

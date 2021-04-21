@@ -13,6 +13,10 @@
   margin: 16px;
 }
 
+.todo.loading {
+  opacity: 0.5;
+}
+
 .todo.complete {
   background-color: #d1ffcf;
 }
@@ -39,6 +43,7 @@
   cursor: pointer;
   margin-top: 4px;
   margin-right: 8px;
+  width: 30px;
 }
 
 .errorPage {

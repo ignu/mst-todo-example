@@ -18,7 +18,7 @@ const apiFetch = (path: string, opts?: Partial<RequestInit>) => {
   return fetch(`${URI_BASE}${path}`, options).then((x) => x.json());
 };
 
-type TodoState = 'complete' | 'overdue' | 'pending';
+type TodoState = 'complete' | 'overdue' | 'pending' | 'loading';
 
 export const Todo = types
   .model({
@@ -26,6 +26,7 @@ export const Todo = types
     description: types.string,
     dueDate: types.maybeNull(DateTime),
     isComplete: types.boolean,
+    loading: types.optional(types.boolean, false),
   })
   .views((self) => {
     return {
@@ -42,10 +43,15 @@ export const Todo = types
   })
   .actions((self) => {
     const toggle = () => {
+      self.loading = false;
       self.isComplete = !self.isComplete;
+    };
+    const startToggle = () => {
+      self.loading = true;
     };
     return {
       toggle,
+      startToggle,
     };
   });
 
@@ -58,10 +64,16 @@ const TodoStore = types
     ),
   })
   .actions((self) => {
-    const toggle = function toggle(todo: TodoType) {
-      console.log('🦄 - todo', todo);
-      todo.toggle();
-    };
+    const toggle = flow(function* toggle(todo: TodoType) {
+      todo.startToggle();
+      const data = yield apiFetch(`patch/${todo.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ isComplete: !todo.isComplete }),
+      });
+      if (data.status === 'success') {
+        todo.toggle();
+      }
+    });
 
     const fetchTodos = flow(function* fetchTodos() {
       try {
