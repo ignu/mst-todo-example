@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { IoIosCheckbox, IoMdSquareOutline } from 'react-icons/io';
-import { TodoType } from '../store';
+import { TodoType } from '../store/todo';
 
 type TodoPropTypes = {
   todo: TodoType;

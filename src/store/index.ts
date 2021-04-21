@@ -1,8 +1,7 @@
-import { isPast } from 'date-fns';
 import { compareDesc } from 'date-fns/fp';
 import { flow, Instance, types } from 'mobx-state-tree';
 import { createContext, useContext } from 'react';
-import { DateTime } from './DateType';
+import Todo, { TodoType } from './todo';
 
 const URI_BASE = 'https://944ba3c5-94c3-4369-a9e6-a509d65912e2.mock.pstmn.io/';
 const apiFetch = (path: string, opts?: Partial<RequestInit>) => {
@@ -14,46 +13,8 @@ const apiFetch = (path: string, opts?: Partial<RequestInit>) => {
     },
     ...opts,
   };
-  console.log('🦄 - options', options);
   return fetch(`${URI_BASE}${path}`, options).then((x) => x.json());
 };
-
-type TodoState = 'complete' | 'overdue' | 'pending' | 'loading';
-
-export const Todo = types
-  .model({
-    id: types.identifier,
-    description: types.string,
-    dueDate: types.maybeNull(DateTime),
-    isComplete: types.boolean,
-    loading: types.optional(types.boolean, false),
-  })
-  .views((self) => {
-    return {
-      get state(): TodoState {
-        if (self.isComplete) {
-          return 'complete';
-        }
-        if (self.dueDate && isPast(self.dueDate)) {
-          return 'overdue';
-        }
-        return 'pending';
-      },
-    };
-  })
-  .actions((self) => {
-    const toggle = () => {
-      self.loading = false;
-      self.isComplete = !self.isComplete;
-    };
-    const startToggle = () => {
-      self.loading = true;
-    };
-    return {
-      toggle,
-      startToggle,
-    };
-  });
 
 const TodoStore = types
   .model({
@@ -110,7 +71,6 @@ const TodoStore = types
   });
 
 export default TodoStore;
-export type TodoType = Instance<typeof Todo>;
 
 export const todoStore = TodoStore.create({});
 export type TodoStoreInstance = Instance<typeof TodoStore>;
