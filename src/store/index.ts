@@ -1,4 +1,5 @@
 import { isPast } from 'date-fns';
+import { compareDesc } from 'date-fns/fp';
 import { flow, Instance, types } from 'mobx-state-tree';
 import { createContext, useContext } from 'react';
 import { DateTime } from './DateType';
@@ -62,12 +63,18 @@ const TodoStore = types
     };
   })
   .views((self) => {
+    const futureDate = new Date(2099, 1, 1);
+    const sortDate = (a: TodoType, b: TodoType) => {
+      return compareDesc(a.dueDate || futureDate, b.dueDate || futureDate);
+    };
+    const complete = () => self._todos.filter((t) => t.isComplete).sort(sortDate);
+    const incomplete = () => self._todos.filter((t) => !t.isComplete).sort(sortDate);
     const todos = () => {
       if (self.state === 'preloading') {
         self.fetchTodos();
       }
 
-      return self._todos;
+      return [...incomplete(), ...complete()];
     };
     return {
       todos,
