@@ -15,6 +15,8 @@ const apiFetch = (path: string, opts?: Partial<RequestInit>) => {
   }).then((x) => x.json());
 };
 
+type TodoState = 'complete' | 'overdue' | 'pending';
+
 export const Todo = types
   .model({
     id: types.identifier,
@@ -24,7 +26,10 @@ export const Todo = types
   })
   .views((self) => {
     return {
-      get state() {
+      get state(): TodoState {
+        if (self.isComplete) {
+          return 'complete';
+        }
         if (self.dueDate && isPast(self.dueDate)) {
           return 'overdue';
         }
