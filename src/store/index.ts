@@ -1,3 +1,4 @@
+import { isPast } from 'date-fns';
 import { types, Instance, flow, getSnapshot } from 'mobx-state-tree';
 import { createContext, useContext } from 'react';
 import { DateTime } from './DateType';
@@ -24,6 +25,9 @@ export const Todo = types
   .views((self) => {
     return {
       get state() {
+        if (self.dueDate && isPast(self.dueDate)) {
+          return 'overdue';
+        }
         return 'pending';
       },
     };

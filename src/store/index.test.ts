@@ -17,6 +17,11 @@ describe('Todo', () => {
       const todo = getTodo({ dueDate: addHours(new Date(), 30) });
       expect(todo.state).toEqual('pending');
     });
+
+    it('is overdue when due date is in the past', () => {
+      const todo = getTodo({ dueDate: addHours(new Date(), -30) });
+      expect(todo.state).toEqual('overdue');
+    });
   });
 });
 
