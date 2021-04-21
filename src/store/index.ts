@@ -1,8 +1,9 @@
 import { types, Instance, flow, getSnapshot } from 'mobx-state-tree';
+import { createContext, useContext } from 'react';
 
 const URI_BASE = 'https://944ba3c5-94c3-4369-a9e6-a509d65912e2.mock.pstmn.io/';
 const apiFetch = (path: string, opts?: Partial<RequestInit>) => {
-  return fetch(`URI_BASE${path}`, {
+  return fetch(`${URI_BASE}${path}`, {
     headers: {
       'Content-Type': 'application/json',
       'X-Api-Key': 'PMAK-5ef63db179d23c004de50751-10300736bc550d2a891dc4355aab8d7a5c',
@@ -13,9 +14,9 @@ const apiFetch = (path: string, opts?: Partial<RequestInit>) => {
 };
 
 export const Todo = types.model({
-  id: types.identifierNumber,
+  id: types.identifier,
   description: types.string,
-  dueDate: types.maybe(types.string),
+  dueDate: types.maybeNull(types.string),
   isComplete: types.boolean,
 });
 
@@ -27,14 +28,19 @@ const TodoStore = types
       'preloading'
     ),
   })
-  .views((self) => {
+  .actions((self) => {
     const fetchTodos = flow(function* fetchTodos() {
       self._todos = yield apiFetch('get');
     });
 
+    return {
+      fetchTodos,
+    };
+  })
+  .views((self) => {
     const todos = () => {
       if (self.state === 'preloading') {
-        fetchTodos();
+        self.fetchTodos();
       }
 
       return self._todos;
@@ -46,3 +52,16 @@ const TodoStore = types
 
 export default TodoStore;
 export type TodoType = Instance<typeof Todo>;
+
+export const todoStore = TodoStore.create({});
+export type TodoStoreInstance = Instance<typeof TodoStore>;
+const RootStoreContext = createContext<null | TodoStoreInstance>(null);
+
+export const Provider = RootStoreContext.Provider;
+export function useMst() {
+  const store = useContext(RootStoreContext);
+  if (store === null) {
+    throw new Error('Store cannot be null, please add a context provider');
+  }
+  return store;
+}
