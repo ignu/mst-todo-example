@@ -7,12 +7,11 @@ type PropTypes = {
 };
 
 const Todo = ({ todo }: PropTypes) => {
-  console.log('🦄 - todo', todo);
   return (
     <div className={`todo ${todo.state}`}>
       <span className="checkbox-wrapper">
-        {!todo.isComplete && <IoMdSquareOutline />}
-        {todo.isComplete && <IoIosCheckbox />}
+        {!todo.isComplete && <IoMdSquareOutline size={24} />}
+        {todo.isComplete && <IoIosCheckbox size={24} />}
       </span>
       <span className="description">{todo.description}</span>
       {!!todo.dueDate && (

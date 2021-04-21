@@ -2,19 +2,15 @@ import React from 'react';
 import { observer } from 'mobx-react-lite'; //
 import { useMst } from '../store';
 import Todo from './Todo';
+import Error from './Error';
+import Spinner from './Spinner';
 
 const Todos = () => {
   const store = useMst();
   const todos = store.todos();
 
-  if (store.state === 'loading') {
-    return (
-      <div className="spinner">
-        <div className="double-bounce1"></div>
-        <div className="double-bounce2"></div>
-      </div>
-    );
-  }
+  if (store.state === 'loading') return <Spinner />;
+  if (store.state === 'error') return <Error />;
 
   return (
     <div className="todos">

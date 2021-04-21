@@ -1,5 +1,5 @@
 import { isPast } from 'date-fns';
-import { types, Instance, flow, getSnapshot } from 'mobx-state-tree';
+import { flow, Instance, types } from 'mobx-state-tree';
 import { createContext, useContext } from 'react';
 import { DateTime } from './DateType';
 
