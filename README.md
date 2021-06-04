@@ -1,4 +1,4 @@
-# [Endpoint TODO Challenge](http://endtodo.surge.sh/)
+# [mobx statetree todo example](http://endtodo.surge.sh/)
 
 A simple todo app that loads a list of todos (tasks which need to be completed) from a remote server. Each todo has a status indicating if it has been completed or not as well as an optional due date. When a todo is marked as complete, the server should be notified about the updated status. If a todo is past its due date but not yet completed it should be clearly indicated to the user that it is overdue.
 
